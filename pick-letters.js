@@ -1,8 +1,8 @@
-#!/usr/bin/env node
-
 /* eslint-disable no-continue */
 
+import { basename } from 'path'
 import { execSync } from 'child_process'
+import { writeFileSync } from 'fs'
 
 const SIZE = 7
 
@@ -121,11 +121,26 @@ function create() {
 }
 
 
-// keep trying until we get at least one word w/ all the letters
-let puzzle
-do {
-  puzzle = create()
-  process.stdout.write('.')
-} while (!puzzle.alls.length)
+function make_puzzle() {
+  // keep trying until we get at least one word w/ all the letters
+  let puzzle
+  do {
+    puzzle = create()
+    process.stdout.write('.')
+    execSync('sleep .1') // avoid CPU meltdown
+  } while (!puzzle.alls.length)
 
-log({ puzzle })
+  writeFileSync('puzzle.json', JSON.stringify(puzzle))
+
+  log({ puzzle })
+}
+
+
+if (basename(process.argv[1]) === 'pick-letters.js') {
+  log('CLI DETECTED')
+  make_puzzle()
+}
+
+
+// eslint-disable-next-line import/prefer-default-export
+export { make_puzzle }

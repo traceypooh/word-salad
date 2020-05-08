@@ -8,6 +8,11 @@
   "browserslist": [
     "> 1%"
   ],
+  "dependencies": {
+    "bootstrap": "",
+    "jquery": "",
+    "supervisor": ""
+  },
   "devDependencies": {
     "eslint": "",
     "eslint-config-airbnb-base": "",
