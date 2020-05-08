@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 
+/* eslint-disable no-continue */
+
 import { execSync } from 'child_process'
-import { runInContext } from 'vm'
 
 const SIZE = 7
 
+// eslint-disable-next-line no-console
 const log = console.log.bind(console)
 
 // letters to count of their tiles in scrabble (excluding blank tile ;-)
@@ -52,6 +54,8 @@ function random_letter() {
     if (random < 0)
       return letter
   }
+
+  return undefined
 }
 
 
@@ -111,10 +115,13 @@ function create() {
       alls.push(word)
   }
 
-  return { letters, center, words, alls }
+  return {
+    letters, center, words, alls,
+  }
 }
 
 
+// keep trying until we get at least one word w/ all the letters
 let puzzle
 do {
   puzzle = create()
