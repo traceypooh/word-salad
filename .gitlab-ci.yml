@@ -1,0 +1,51 @@
+# Extensions to "house style" GitLab Auto DevOps
+#   https://docs.gitlab.com/ee/topics/autodevops/#customizing-gitlab-ciyml
+#
+# Extends (it's included further below at 'include'):
+#   https://gitlab.com/gitlab-org/gitlab/blob/master/lib/gitlab/ci/templates/Auto-DevOps.gitlab-ci.yml
+#
+#
+# This is the default Helm chart GitLab Auto DevOps uses:
+#   https://gitlab.com/gitlab-org/charts/auto-deploy-app
+#
+# Basic customizations can be made via variables from:
+#   https://gitlab.com/gitlab-org/charts/auto-deploy-app/-/blob/master/values.yaml
+#
+# and put into `./.gitlab/auto-deploy-values.yaml`
+
+
+
+include:
+  # include defaults
+  - template: Auto-DevOps.gitlab-ci.yml
+
+
+review:
+  environment:
+    kubernetes:
+      namespace: word-salad
+
+stop_review:
+  environment:
+    kubernetes:
+      namespace: word-salad
+
+staging:
+  environment:
+    kubernetes:
+      namespace: word-salad
+
+canary:
+  environment:
+    kubernetes:
+      namespace: word-salad
+
+production:
+  environment:
+    kubernetes:
+      namespace: word-salad
+
+production_manual:
+  environment:
+    kubernetes:
+      namespace: word-salad
