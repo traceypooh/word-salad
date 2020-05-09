@@ -24,7 +24,7 @@ function alog(file, code = 200) {
 http.createServer((req, res) => {
   let type = 'text/html'
   let status = 200
-  let pipe = true
+  let htm = false
   const file = req.url
     .slice(1) // nix lead /
     .replace(/^services\/clusters\//, '') // sigh - current way paths are proxy-passed to us
@@ -33,11 +33,25 @@ http.createServer((req, res) => {
   // case '/node_modules/bootstrap/dist/js/bootstrap.min.js':
 
   case 'node_modules/bootstrap/dist/css/bootstrap.min.css':
+  case 'css.css':
     type = 'text/css'
+    break
+
+  case 'node_modules/jquery/dist/jquery.min.js':
+  case 'client.js':
+    type = 'text/javascript'
     break
 
   case 'favicon.ico':
     type = 'image/x-icon'
+    break
+
+  case 'puzzle.json':
+    type = 'application/json'
+    break
+
+  case 'logo.png':
+    type = 'image/png'
     break
 
   case '':
@@ -46,22 +60,22 @@ http.createServer((req, res) => {
     if (!existsSync('puzzle.json')  ||  new Date().toISOString().slice(14, 18) === '00:0')
       make_puzzle()
 
-    pipe = false
-    res.end(webpage())
+    htm = webpage()
     break
 
   default:
     status = 404
-    pipe = false
-    res.end(`<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"></head><body>
-            🇫🇷 Merde, il n'y a rien ici! - Corentin`)
+    htm = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"></head><body>
+      🇫🇷 Merde, il n'y a rien ici! - Corentin`
   }
 
   // static file - send it directly out
   alog(file)
   res.writeHead(status, { 'Content-Type': type })
 
-  if (pipe)
+  if (htm)
+    res.end(htm)
+  else
     createReadStream(file).pipe(res)
 }).listen(5000)
 

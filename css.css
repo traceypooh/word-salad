@@ -1,0 +1,52 @@
+
+body {
+  margin-top: 25px;
+}
+
+.logo {
+  float: right;
+  border-radius: 62px;
+  width: 125px;
+}
+
+.ltrs {
+  position: relative;
+  width: 400px;
+  height: 400px;
+  margin: auto;
+}
+
+.ltrs .ltr {
+  position: absolute;
+  left: 150px;
+  top: 150px;
+  margin-left: -5px;
+  margin-top: -5px;
+  font-size: 100px;
+  text-align: center;
+  min-width: 100px;
+  max-height: 120px;
+  border: 1px solid pink;
+  border-radius: 50px;
+  line-height: 1.0;
+  text-transform: uppercase;
+}
+
+.ltrs .ltr:nth-child(1) { transform: rotate(  0deg) translate(0)     rotate(   0deg) }
+.ltrs .ltr:nth-child(2) { transform: rotate( 60deg) translate(125px) rotate( -60deg) }
+.ltrs .ltr:nth-child(3) { transform: rotate(120deg) translate(125px) rotate(-120deg) }
+.ltrs .ltr:nth-child(4) { transform: rotate(180deg) translate(125px) rotate(-180deg) }
+.ltrs .ltr:nth-child(5) { transform: rotate(240deg) translate(125px) rotate(-240deg) }
+.ltrs .ltr:nth-child(6) { transform: rotate(300deg) translate(125px) rotate(-300deg) }
+.ltrs .ltr:nth-child(7) { transform: rotate(  0deg) translate(125px) rotate(   0deg) }
+
+#score {
+  display: inline-block;
+  font-weight: bold;
+  color: red;
+  font-size: 150%;
+}
+
+#found {
+  column-width: 150px;
+}
