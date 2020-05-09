@@ -32,8 +32,9 @@ http.createServer((req, res) => {
   switch (file) {
   // case '/node_modules/bootstrap/dist/js/bootstrap.min.js':
 
-  case 'node_modules/bootstrap/dist/css/bootstrap.min.css':
   case 'css.css':
+  case 'node_modules/bootstrap/dist/css/bootstrap.min.css':
+  case 'node_modules/bootstrap/dist/css/bootstrap.min.css.map':
     type = 'text/css'
     break
 

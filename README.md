@@ -8,7 +8,6 @@ but all hand-made...
 - make leaving page make JS confirm (to not lose current puzzle)
 - cron wipe `puzzle.json` ~4am pactime
 - local storage until 4am to save state
-- 'shuffle' button
 - 'delete char' button
 - pressing letters types them
 - calc/show max score

@@ -6,6 +6,10 @@ import { writeFileSync } from 'fs'
 
 const SIZE = 7
 
+// you can switch this to a specific letters/center set if desired
+const SPECIFIC_GAME = false // { letters: 'hoifwtr'.split(''), center: 'r' }
+
+
 // eslint-disable-next-line no-console
 const log = console.log.bind(console)
 
@@ -102,8 +106,8 @@ function get_letters() {
   const center = consonants[Math.floor(Math.random() * consonants.length)]
   // log({ consonants, center, letters })
 
-  if (0)
-    return { letters: 'hoifwtr'.split(''), center: 'r' }
+  if (SPECIFIC_GAME)
+    return SPECIFIC_GAME
 
   return { letters, center }
 }
