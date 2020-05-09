@@ -2,33 +2,94 @@
 // puzzle config
 const p = {}
 
-const found = {}
-let score = 0
+const state = {
+  found: {},
+  score: 0,
+}
 
 // eslint-disable-next-line no-console
 const log = console.log.bind(console)
+
+
+/**
+ * Computes and returns score for given word
+ * @param string word
+ * @returns int
+ */
+function word_score(word) {
+  if (word in state.found)
+    return 0
+
+  if (!(word in p.words))
+    return 0
+
+  return (
+    0 +
+    (word in p.alls ? 7 : 0) +
+    (word.length > 4 ? word.length : 1)
+  )
+}
+
+
+function max_score() {
+  Object.keys(p.words).reduce((sum, e) => log(e, word_score(e)))
+  return Object.keys(p.words).reduce((sum, e) => sum + word_score(e), 0)
+}
+
+
+function storage_name() {
+  return `word-salad${(location.hostname === 'localhost' ? '-dev' : '')}`
+}
+
+
+function store_state() {
+  if (typeof localStorage !== 'object')
+    return
+
+  localStorage.setItem(storage_name(), JSON.stringify(state))
+}
+
+
+function update() {
+  store_state()
+  const founds = Object.keys(state.found).sort()
+  $('#found').html(founds.join('<br>'))
+  $('#score').html(state.score)
+  $('#nfound').html(founds.length)
+}
+
+
+function restore_state() {
+  if (typeof localStorage !== 'object')
+    return
+
+  const stored = localStorage.getItem(storage_name())
+  if (stored) {
+    state.found = JSON.parse(stored).found
+    state.score = JSON.parse(stored).score
+  }
+
+  update()
+}
+
 
 function enter() {
   const $enter = $('#enter')
   const submitted = $enter.val().trim()
   $enter.val('')
   log({ submitted })
-  if (submitted in found)
+  const score = word_score(submitted)
+
+  if (!score)
     return false
 
-  if (submitted in p.words) {
-    score += (submitted.length > 4 ? submitted.length : 1)
-    found[submitted] = true
+  state.score += score
+  state.found[submitted] = true
 
-    $('#found').html(Object.keys(found).sort().join('<br>'))
-  }
-
-  if (submitted in p.alls)
-    score += 7
-
-  $('#score').html(score)
+  update()
   return false
 }
+
 
 /**
  * Shuffles array in place. ES6 version
@@ -64,16 +125,20 @@ function add_letters() {
 
 function spoil() {
   const answers = []
-  Object.keys(p.words).map((e) => answers.push(e in found ? e : `<i>${e in p.alls ? `<b>${e} *</b>` : e}</i>`))
+  Object.keys(p.words).map((e) => answers.push(e in state.found ? e : `<i>${e in p.alls ? `<b>${e} *</b>` : e}</i>`))
   $('#found').html(answers.join('<br>'))
 }
 
 
 function help() {
   $('#help').html(`
-    <li>today's puzzle contains ${Object.keys(p.words).length} "words"</li>
+    <li>
+      today's puzzle contains ${Object.keys(p.words).length} words
+      (<span id="nfound">0</span> discovered)
+    </li>
+    <li>today's puzzle maximum score: ${max_score()}</li>
     <li>create words with 4 or more letters</li>
-    <li>each word must contain '${p.center}'</li>
+    <li>each word must contain: <code>${p.center}</code></li>
     <li>letters can be repeated</li>
     <li>1 point for 4 letter words</li>
     <li>words longer than four letters get an additional point per letter</li>
@@ -103,6 +168,7 @@ $(() => {
 
     help()
     add_letters()
+    restore_state()
   })
 
   $('#form').on('submit', enter)

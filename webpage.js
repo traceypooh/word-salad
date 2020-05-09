@@ -26,11 +26,11 @@ function webpage() {
   <form id="form">
     <b>enter word:</b>
     <input class="input" type="text" id="enter"></input>
+    <input class="btn btn-sm btn-primary" type="submit" value="enter"></input>
 
     <b>score:</b>
     <div id="score">0</div>
 
-    <input class="btn btn-sm btn-primary" type="submit" value="enter"></input>
     <input class="btn btn-sm btn-info"    type="button" id="shuffle" value="shuffle"></input>
     <input class="btn btn-sm btn-danger"  type="button" id="spoil"   value="spoiler"></input>
   </form>
@@ -38,12 +38,12 @@ function webpage() {
   <div id="found">
   </div>
 
-  <div class="card card-body bg-light">
+  <div class="card card-body bg-dark">
     <ul id="help">
     </ul>
   </div>
 
-  <div id="cite" class="card card-body bg-light">
+  <div id="cite" class="card card-body bg-dark">
     🐝 very similar to
     <a href="https://www.nytimes.com/puzzles/spelling-bee">
       NY Times Spelling Bee
