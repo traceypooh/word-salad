@@ -80,4 +80,4 @@ http.createServer((req, res) => {
     createReadStream(file).pipe(res)
 }).listen(5000)
 
-log('listenin')
+alog('starting', 666)

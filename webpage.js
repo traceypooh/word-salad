@@ -50,6 +50,10 @@ function webpage() {
     </a>
     but all hand-made...
   </div>
+
+  <div class="card card-body bg-dark">
+    😍 <i>dedicated to sonia</i>
+  </div>
 </div>
 </body></html>
 `

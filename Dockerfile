@@ -8,4 +8,4 @@ WORKDIR  /app
 RUN npm i
 
 USER node
-CMD node
+CMD node[ "./node_modules/.bin/supervisor", ".", "index.js" ]
