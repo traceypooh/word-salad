@@ -59,7 +59,7 @@ function random_letter() {
 }
 
 
-function create() {
+function get_letters() {
   // now pick letters
   //   we have to include at least 1 vowel
   //   we never want repeats or more than 2 vowels ;-)
@@ -95,12 +95,22 @@ function create() {
   while (letters.length > SIZE)
     letters.shift()
 
+
   // now pick the central letter
   const consonants = letters.filter((e) => !['a', 'e', 'i', 'o', 'u'].includes(e))
 
   const center = consonants[Math.floor(Math.random() * consonants.length)]
   // log({ consonants, center, letters })
 
+  if (0)
+    return { letters: 'hoifwtr'.split(''), center: 'r' }
+
+  return { letters, center }
+}
+
+
+function create() {
+  const { letters, center } = get_letters()
 
   // now filter words dictionary to just the words made up of the limited letters,
   // where each word _additionally_ has to contain center letter.

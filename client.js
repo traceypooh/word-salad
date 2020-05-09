@@ -18,24 +18,38 @@ function wipe(map) {
 }
 
 
-function check(e) {
-  const $inp = $(e.currentTarget).find('input')
-  const submitted = $inp.val().trim()
-  $inp.val('')
+function check() {
+  const $enter = $('#enter')
+  const submitted = $enter.val().trim()
+  $enter.val('')
   log({ submitted })
   if (submitted in found)
     return
 
   if (submitted in words) {
-    score += submitted.length - 3
+    score += (submitted.length > 4 ? submitted.length : 1)
     found[submitted] = true
 
-    $('#score').html(score)
     $('#found').html(Object.keys(found).sort().join('<br>'))
   }
+
+  if (submitted in alls)
+    score += 7
+
+  $('#score').html(score)
 }
 
+
+function spoil() {
+  const answers = []
+  Object.keys(words).map((e) => answers.push(e in found ? e : `<i>${e in alls ? `<b>${e}</b>` : e}</i>`))
+  $('#found').html(answers.join('<br>'))
+}
+
+
 $(() => {
+  $('#enter').focus()
+
   $('#form').on('submit', (e) => {
     // eslint-disable-next-line no-console
     console.log('submitted', e)
@@ -44,7 +58,7 @@ $(() => {
         log(ret)
         wipe(words)
         wipe(alls)
-        for (const word of ret.words)
+        for (const word of ret.words.sort())
           words[word] = true
         for (const all of ret.alls)
           alls[all] = true
@@ -58,4 +72,6 @@ $(() => {
 
     return false
   })
+
+  $('#spoil').on('click', spoil)
 })

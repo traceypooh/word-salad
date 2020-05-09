@@ -31,10 +31,13 @@ function webpage() {
 
   <form id="form">
     <b>enter word:</b>
-    <input class="input" type="text" value=""></input>
+    <input class="input" type="text" id="enter"></input>
 
     <b>score:</b>
     <div id="score">0</div>
+
+    <input class="btn btn-sm btn-primary" type="submit" value="enter"></input>
+    <input class="btn btn-sm btn-danger"  type="button" id="spoil" value="spoiler"></input>
   </form>
 
   <div id="found">
@@ -47,7 +50,9 @@ function webpage() {
       <li>each word must contain '${j.center}'</li>
       <li>letters can be repeated</li>
       <li>1 point for 4 letter words</li>
-      <li>each word longer than four letters gets an additional point per letter</li>
+      <li>words longer than four letters get an additional point per letter</li>
+      <li>a “pangram” - which uses every letter - is worth 7 extra points</li>
+      <li>this puzzle contains ${j.alls.length} pangrams</li>
     </ul>
   </div>
 </div>

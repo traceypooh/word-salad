@@ -26,7 +26,7 @@ body {
   text-align: center;
   min-width: 100px;
   max-height: 120px;
-  border: 1px solid pink;
+  border: 3px dashed #999;
   border-radius: 50px;
   line-height: 1.0;
   text-transform: uppercase;
@@ -45,8 +45,17 @@ body {
   font-weight: bold;
   color: red;
   font-size: 150%;
+  background-color: #222;
+  width: 60px;
+  border-radius: 15px;
+  text-align: center;
 }
 
 #found {
   column-width: 150px;
+}
+
+#found i {
+  font-style: normal;
+  color: red;
 }
