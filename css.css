@@ -59,3 +59,7 @@ body {
   font-style: normal;
   color: red;
 }
+
+
+/* bootstrap overrides */
+#cite.card { display: block }

@@ -64,25 +64,21 @@ function add_letters() {
 
 function spoil() {
   const answers = []
-  Object.keys(p.words).map((e) => answers.push(e in found ? e : `<i>${e in p.alls ? `<b>${e}</b>` : e}</i>`))
+  Object.keys(p.words).map((e) => answers.push(e in found ? e : `<i>${e in p.alls ? `<b>${e} *</b>` : e}</i>`))
   $('#found').html(answers.join('<br>'))
 }
 
 
 function help() {
   $('#help').html(`
-    <div class="card card-body bg-light">
-      <ul>
-        <li>today's puzzle contains ${Object.keys(p.words).length} "words"</li>
-        <li>create words with 4 or more letters</li>
-        <li>each word must contain '${p.center}'</li>
-        <li>letters can be repeated</li>
-        <li>1 point for 4 letter words</li>
-        <li>words longer than four letters get an additional point per letter</li>
-        <li>a “pangram” - which uses every letter - is worth 7 extra points</li>
-        <li>this puzzle contains ${Object.keys(p.alls).length} pangrams</li>
-      </ul>
-    </div>
+    <li>today's puzzle contains ${Object.keys(p.words).length} "words"</li>
+    <li>create words with 4 or more letters</li>
+    <li>each word must contain '${p.center}'</li>
+    <li>letters can be repeated</li>
+    <li>1 point for 4 letter words</li>
+    <li>words longer than four letters get an additional point per letter</li>
+    <li>a “pangram” - which uses every letter - is worth 7 extra points</li>
+    <li>this puzzle contains ${Object.keys(p.alls).length} pangrams</li>
   `)
 }
 
