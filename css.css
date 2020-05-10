@@ -13,37 +13,46 @@ body {
 
 .ltrs {
   position: relative;
-  width: 400px;
-  height: 400px;
-  margin: auto;
+  width: 200px;
+  height: 200px;
+  margin-left: 20%;
 }
 
-.ltrs .ltr {
-  transition: background-color 0.1s ease;
+.ltr {
+  transition: all 0.1s ease;
   position: absolute;
-  left: 150px;
-  top: 150px;
+  left: 75px;
+  top: 75px;
   margin-left: -5px;
   margin-top: -5px;
-  font-size: 100px;
+  font-size: 45px;
   text-align: center;
-  min-width: 100px;
-  max-height: 120px;
+  min-width: 50px;
+  max-height: 60px;
   border: 3px dashed #999;
-  border-radius: 50px;
+  border-radius: 25px;
   line-height: 1.0;
   text-transform: uppercase;
-  text-decoration: none;
+  text-decoration: none !important;
   color: white !important;
 }
 
-.ltrs .ltr:nth-child(1) { transform: rotate(  0deg) translate(0)     rotate(   0deg) }
-.ltrs .ltr:nth-child(2) { transform: rotate( 60deg) translate(125px) rotate( -60deg) }
-.ltrs .ltr:nth-child(3) { transform: rotate(120deg) translate(125px) rotate(-120deg) }
-.ltrs .ltr:nth-child(4) { transform: rotate(180deg) translate(125px) rotate(-180deg) }
-.ltrs .ltr:nth-child(5) { transform: rotate(240deg) translate(125px) rotate(-240deg) }
-.ltrs .ltr:nth-child(6) { transform: rotate(300deg) translate(125px) rotate(-300deg) }
-.ltrs .ltr:nth-child(7) { transform: rotate(  0deg) translate(125px) rotate(   0deg) }
+.ltr.pressed {
+  background-color: black; /* #666666; */
+  color: #ccc !important;
+}
+
+.ltr:hover {
+  border-color: white;
+}
+
+.ltr:nth-child(1) { transform: rotate(  0deg) translate(0)    rotate(   0deg) }
+.ltr:nth-child(2) { transform: rotate( 60deg) translate(60px) rotate( -60deg) }
+.ltr:nth-child(3) { transform: rotate(120deg) translate(60px) rotate(-120deg) }
+.ltr:nth-child(4) { transform: rotate(180deg) translate(60px) rotate(-180deg) }
+.ltr:nth-child(5) { transform: rotate(240deg) translate(60px) rotate(-240deg) }
+.ltr:nth-child(6) { transform: rotate(300deg) translate(60px) rotate(-300deg) }
+.ltr:nth-child(7) { transform: rotate(  0deg) translate(60px) rotate(   0deg) }
 
 #score {
   display: inline-block;

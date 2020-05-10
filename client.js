@@ -130,8 +130,8 @@ function shuffle(a) {
 function letter_pressed(evt) {
   const $targ = $(evt.currentTarget)
   const letter = $targ.text()
-  $targ.css('background-color', '#666666')
-  setTimeout(() => $targ.css('background-color', 'transparent'), 250)
+  $targ.addClass('pressed')
+  setTimeout(() => $targ.removeClass('pressed'), 250)
   const val = $('#enter').val().concat(letter)
   $('#enter').val(val)
 
@@ -145,15 +145,11 @@ function letter_pressed(evt) {
 
 function add_letters() {
   const ltrs = shuffle(p.letters.filter((e) => e !== p.center))
-  $('.ltrs').html(`
-    <a class="ltr" href="#"><div>${p.center}</div></a>
-    <a class="ltr" href="#"><div>${ltrs.pop()}</div></a>
-    <a class="ltr" href="#"><div>${ltrs.pop()}</div></a>
-    <a class="ltr" href="#"><div>${ltrs.pop()}</div></a>
-    <a class="ltr" href="#"><div>${ltrs.pop()}</div></a>
-    <a class="ltr" href="#"><div>${ltrs.pop()}</div></a>
-    <a class="ltr" href="#"><div>${ltrs.pop()}</div></a>
-  `)
+  let htm = `<a class="ltr" href="#"><div>${p.center}</div></a>`
+  while (ltrs.length)
+    htm += `<a class="ltr" href="#"><div>${ltrs.pop()}</div></a>`
+
+  $('.ltrs').html(htm)
 
   $('.ltr').on('click', letter_pressed)
 }
@@ -177,7 +173,7 @@ function help() {
     <li>each word must contain: <div class="must">${p.center}</div></li>
     <li>letters can be repeated</li>
     <li>1 point for 4 letter words</li>
-    <li>words longer than four letters get an additional point per letter</li>
+    <li>words longer than 4 letters get an additional point per letter</li>
     <li>a “pangram” - which uses every letter - is worth 7 extra points</li>
     <li>this puzzle contains <u>${Object.keys(p.alls).length}</u> pangrams</li>
   `)
