@@ -5,7 +5,8 @@ https://www.nytimes.com/puzzles/spelling-bee
 but all hand-made...
 
 ## todo
-- 'delete char' button
+- [delete char] button
+- [new puzzle] button
 - pick levels / names / indicator (pie chart?)
 
 ## setup

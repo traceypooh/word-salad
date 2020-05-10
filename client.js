@@ -82,24 +82,39 @@ function restore_state() {
 }
 
 
+function msg(str) {
+  $('#msg').html(
+    `<div class="alert alert-info">${str}</div>`,
+  )
+  setTimeout(() => $('#msg .alert').css('opacity', 0), 500)
+}
+
+
 function enter() {
   const $enter = $('#enter')
   const submitted = $enter.val().trim().toLowerCase()
+  if (submitted === '')
+    return false // to aid w/ iOS - as of now - we get 2 events a lot w/ 2nd as blank - ignore it
 
   $enter.val('')
   log({ submitted })
+
+  if (!submitted.includes(p.center)) {
+    msg(`${submitted} missing <b>${p.center.toUpperCase()}</b>`)
+    return false
+  }
+
   const score = word_score(submitted)
 
-  if (!score)
+  if (!score) {
+    msg(`${submitted} not in list`)
     return false
+  }
 
   // eslint-disable-next-line no-nested-ternary
   const encouragment = (score > 7 ? '😍 OH SNAP' : (score > 1 ? '🚀 fantastic' : '😎 nice'))
 
-  $('#msg').html(
-    `<div class="alert alert-info">${encouragment}!  <b>+${score} pts</b></div>`,
-  )
-  setTimeout(() => $('#msg .alert').css('opacity', 0), 500)
+  msg(`${encouragment}!  <b>+${score} pts</b>`)
 
   state.score += score
   state.found[submitted] = true
@@ -166,7 +181,7 @@ function help() {
   $('#help').html(`
     <li>
       today's puzzle contains <u>${Object.keys(p.words).length}</u> words
-      (<span id="nfound">0</span> discovered)
+      <span id="nfound">0</span> discovered
     </li>
     <li>today's puzzle maximum score: <u>${max_score()}</u></li>
     <li>create words with 4 or more letters</li>
