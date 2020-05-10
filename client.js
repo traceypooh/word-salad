@@ -150,17 +150,17 @@ function spoil() {
 function help() {
   $('#help').html(`
     <li>
-      today's puzzle contains ${Object.keys(p.words).length} words
+      today's puzzle contains <u>${Object.keys(p.words).length}</u> words
       (<span id="nfound">0</span> discovered)
     </li>
-    <li>today's puzzle maximum score: ${max_score()}</li>
+    <li>today's puzzle maximum score: <u>${max_score()}</u></li>
     <li>create words with 4 or more letters</li>
-    <li>each word must contain: <code>${p.center}</code></li>
+    <li>each word must contain: <div class="must">${p.center}</div></li>
     <li>letters can be repeated</li>
     <li>1 point for 4 letter words</li>
     <li>words longer than four letters get an additional point per letter</li>
     <li>a “pangram” - which uses every letter - is worth 7 extra points</li>
-    <li>this puzzle contains ${Object.keys(p.alls).length} pangrams</li>
+    <li>this puzzle contains <u>${Object.keys(p.alls).length}</u> pangrams</li>
   `)
 }
 

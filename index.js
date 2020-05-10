@@ -1,7 +1,7 @@
 /* eslint-disable no-continue */
 
 import http from 'http'
-import { createReadStream, existsSync } from 'fs'
+import { createReadStream, existsSync, lstatSync } from 'fs'
 
 import { make_puzzle } from './pick-letters.js'
 import { webpage } from './webpage.js'
@@ -58,8 +58,10 @@ http.createServer((req, res) => {
   case '':
     // Generate or regenerate ~4am pactime
     // (kuberenetes health/liveness probes us ~every 10s)
-    if (!existsSync('puzzle.json')  ||  new Date().toISOString().slice(11, 18) === '11:10:0')
+    if (!existsSync('puzzle.json')  ||  !lstatSync('puzzle.json').size  ||
+        new Date().toISOString().slice(11, 18) === '11:10:0') {
       make_puzzle()
+    }
 
     htm = webpage()
     break
