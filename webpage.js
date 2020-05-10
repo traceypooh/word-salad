@@ -1,6 +1,6 @@
+const VERSION = 3
 
 function webpage() {
-  const v = 2
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -15,8 +15,8 @@ function webpage() {
 <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
 <script src="/node_modules/jquery/dist/jquery.min.js"></script>
 
-<link href="/css.css?v=${v}" rel="stylesheet" type="text/css"/>
-<script src="/client.js?v=${v}" type="module"></script>
+<link href="/css.css?v=${VERSION}" rel="stylesheet" type="text/css"/>
+<script src="/client.js?v=${VERSION}" type="module"></script>
 
 <div class="container">
   <img class="logo" src="/logo.png"/>

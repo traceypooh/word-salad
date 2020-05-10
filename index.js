@@ -27,7 +27,7 @@ http.createServer((req, res) => {
   let htm = false
   const file = req.url
     .slice(1) // nix lead /
-    .replace(/^services\/clusters\//, '') // sigh - current way paths are proxy-passed to us
+    .split(/[?&]/)[0] // ignore any cgi args
 
   switch (file) {
   // case '/node_modules/bootstrap/dist/js/bootstrap.min.js':
