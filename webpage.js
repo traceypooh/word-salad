@@ -1,5 +1,6 @@
 
 function webpage() {
+  const v = 2
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -12,9 +13,10 @@ function webpage() {
 </head>
 <body>
 <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-<link href="/css.css" rel="stylesheet" type="text/css"/>
 <script src="/node_modules/jquery/dist/jquery.min.js"></script>
-<script src="/client.js" type="module"></script>
+
+<link href="/css.css?v=${v}" rel="stylesheet" type="text/css"/>
+<script src="/client.js?v=${v}" type="module"></script>
 
 <div class="container">
   <img class="logo" src="/logo.png"/>

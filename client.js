@@ -84,7 +84,9 @@ function restore_state() {
 
 function enter() {
   const $enter = $('#enter')
-  const submitted = $enter.val().trim()
+  const submitted = $enter.val().trim().toLowerCase()
+alert(submitted)
+
   $enter.val('')
   log({ submitted })
   const score = word_score(submitted)
@@ -207,6 +209,7 @@ $(() => {
   })
 
   $('#form').on('submit', enter)
+  $('#enter').on('change', enter)
 
   $('#shuffle').on('click', add_letters)
 
