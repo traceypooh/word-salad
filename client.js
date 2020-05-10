@@ -85,6 +85,7 @@ function restore_state() {
 function enter() {
   const $enter = $('#enter')
   const submitted = $enter.val().trim().toLowerCase()
+  // eslint-disable-next-line
 alert(submitted)
 
   $enter.val('')
