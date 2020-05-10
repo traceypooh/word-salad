@@ -54,8 +54,10 @@ function webpage() {
     but all hand-made...
   </div>
 
-  <div class="card card-body bg-dark">
-    😍 <i>dedicated to sonia</i>
+  <div id="misc" class="card card-body bg-dark">
+    😍 <i>dedicated to sonia</i>.<br>
+    Word list from <a href="http://app.aspell.net/create">SCOWL</a>.<br>
+    Built with 🤍 by <a href="https://poohBot.com">@tracey_pooh</a> using nodejs.<br>
   </div>
 </div>
 </body></html>

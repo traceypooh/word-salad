@@ -75,3 +75,5 @@ body {
 
 /* bootstrap overrides */
 #cite.card { display: block }
+#misc.card { display: block }
+a { color: cyan }
