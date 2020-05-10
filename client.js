@@ -93,7 +93,7 @@ function enter() {
     return false
 
   // eslint-disable-next-line no-nested-ternary
-  const encouragment = (score > 7 ? 'OH SNAP' : (score > 1 ? 'fantastic' : 'nice'))
+  const encouragment = (score > 7 ? '😍 OH SNAP' : (score > 1 ? '🚀 fantastic' : '😎 nice'))
 
   $('#msg').html(
     `<div class="alert alert-info">${encouragment}!  <b>+${score} pts</b></div>`,
@@ -126,17 +126,28 @@ function shuffle(a) {
 }
 
 
+function letter_pressed(e) {
+  const letter = $(e.currentTarget).text()
+  $(e.currentTarget).css('background-color', '#666666')
+  setTimeout(() => $(e.currentTarget).css('background-color', 'transparent'), 250)
+  const val = $('#enter').val().concat(letter)
+  $('#enter').val(val)
+}
+
+
 function add_letters() {
   const ltrs = shuffle(p.letters.filter((e) => e !== p.center))
   $('.ltrs').html(`
-    <div class="ltr">${p.center}</div>
-    <div class="ltr">${ltrs.pop()}</div>
-    <div class="ltr">${ltrs.pop()}</div>
-    <div class="ltr">${ltrs.pop()}</div>
-    <div class="ltr">${ltrs.pop()}</div>
-    <div class="ltr">${ltrs.pop()}</div>
-    <div class="ltr">${ltrs.pop()}</div>
+    <a class="ltr" href="#"><div>${p.center}</div></a>
+    <a class="ltr" href="#"><div>${ltrs.pop()}</div></a>
+    <a class="ltr" href="#"><div>${ltrs.pop()}</div></a>
+    <a class="ltr" href="#"><div>${ltrs.pop()}</div></a>
+    <a class="ltr" href="#"><div>${ltrs.pop()}</div></a>
+    <a class="ltr" href="#"><div>${ltrs.pop()}</div></a>
+    <a class="ltr" href="#"><div>${ltrs.pop()}</div></a>
   `)
+
+  $('.ltr').on('click', letter_pressed)
 }
 
 

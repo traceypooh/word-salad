@@ -19,6 +19,7 @@ body {
 }
 
 .ltrs .ltr {
+  transition: background-color 0.1s ease;
   position: absolute;
   left: 150px;
   top: 150px;
@@ -32,6 +33,8 @@ body {
   border-radius: 50px;
   line-height: 1.0;
   text-transform: uppercase;
+  text-decoration: none;
+  color: white !important;
 }
 
 .ltrs .ltr:nth-child(1) { transform: rotate(  0deg) translate(0)     rotate(   0deg) }

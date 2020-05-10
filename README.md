@@ -6,7 +6,6 @@ but all hand-made...
 
 ## todo
 - 'delete char' button
-- pressing letters types them
 - pick levels / names / indicator (pie chart?)
 
 ## setup
