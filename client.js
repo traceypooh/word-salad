@@ -126,12 +126,19 @@ function shuffle(a) {
 }
 
 
-function letter_pressed(e) {
-  const letter = $(e.currentTarget).text()
-  $(e.currentTarget).css('background-color', '#666666')
-  setTimeout(() => $(e.currentTarget).css('background-color', 'transparent'), 250)
+function letter_pressed(evt) {
+  const $targ = $(evt.currentTarget)
+  const letter = $targ.text()
+  $targ.css('background-color', '#666666')
+  setTimeout(() => $targ.css('background-color', 'transparent'), 250)
   const val = $('#enter').val().concat(letter)
   $('#enter').val(val)
+
+  // eslint-disable-next-line no-unused-expressions
+  evt && evt.preventDefault  && evt.preventDefault()
+  // eslint-disable-next-line no-unused-expressions
+  evt && evt.stopPropagation && evt.stopPropagation()
+  return false
 }
 
 
