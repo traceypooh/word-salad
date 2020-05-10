@@ -31,6 +31,9 @@ function webpage() {
     <b>score:</b>
     <div id="score">0</div>
 
+    <div id="msg">
+    </div>
+
     <input class="btn btn-sm btn-info"    type="button" id="shuffle" value="shuffle"></input>
     <input class="btn btn-sm btn-danger"  type="button" id="spoil"   value="spoiler"></input>
   </form>

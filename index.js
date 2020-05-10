@@ -56,9 +56,9 @@ http.createServer((req, res) => {
     break
 
   case '':
-    // Generate or regenerate at the top of every hour (extract "MM:S" from date string)
+    // Generate or regenerate ~4am pactime
     // (kuberenetes health/liveness probes us ~every 10s)
-    if (!existsSync('puzzle.json')  ||  new Date().toISOString().slice(14, 18) === '00:0')
+    if (!existsSync('puzzle.json')  ||  new Date().toISOString().slice(11, 18) === '11:10:0')
       make_puzzle()
 
     htm = webpage()

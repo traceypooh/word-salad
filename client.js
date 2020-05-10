@@ -5,6 +5,7 @@ const p = {}
 const state = {
   found: {},
   score: 0,
+  letters: '',
 }
 
 // eslint-disable-next-line no-console
@@ -32,7 +33,6 @@ function word_score(word) {
 
 
 function max_score() {
-  Object.keys(p.words).reduce((sum, e) => log(e, word_score(e)))
   return Object.keys(p.words).reduce((sum, e) => sum + word_score(e), 0)
 }
 
@@ -63,13 +63,22 @@ function restore_state() {
   if (typeof localStorage !== 'object')
     return
 
-  const stored = localStorage.getItem(storage_name())
-  if (stored) {
-    state.found = JSON.parse(stored).found
-    state.score = JSON.parse(stored).score
-  }
+  const json = localStorage.getItem(storage_name())
+  if (!json)
+    return
 
-  update()
+  const stored = JSON.parse(json)
+  // if the day's puzzle has changed and they reloaded the page, they're starting over
+  if (stored.letters === p.letters.sort().join('')) {
+    // same puzzle - restore it
+    state.found = stored.found
+    state.score = stored.score
+    state.letters = p.letters.sort().join('')
+    $('#msg').html('<div class="alert alert-info">welcome back!</div>')
+    update()
+  } else {
+    state.letters = p.letters.sort().join('')
+  }
 }
 
 
@@ -82,6 +91,14 @@ function enter() {
 
   if (!score)
     return false
+
+  // eslint-disable-next-line no-nested-ternary
+  const encouragment = (score > 7 ? 'OH SNAP' : (score > 1 ? 'fantastic' : 'nice'))
+
+  $('#msg').html(
+    `<div class="alert alert-info">${encouragment}!  <b>+${score} pts</b></div>`,
+  )
+  setTimeout(() => $('#msg .alert').css('opacity', 0), 500)
 
   state.score += score
   state.found[submitted] = true

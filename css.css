@@ -47,7 +47,7 @@ body {
   font-weight: bold;
   color: red;
   font-size: 150%;
-  background-color: #222;
+  background-color: wheat;
   width: 60px;
   border-radius: 15px;
   text-align: center;
@@ -60,6 +60,16 @@ body {
 #found i {
   font-style: normal;
   color: red;
+}
+
+#msg {
+  display: inline-block;
+}
+#msg .alert {
+  transition: opacity 4s ease;
+  opacity: 1.0;
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
 
 
