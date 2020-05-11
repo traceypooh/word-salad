@@ -46,7 +46,7 @@ body {
   border-color: white;
 }
 
-.ltr:nth-child(1) { transform: rotate(  0deg) translate(0)    rotate(   0deg) }
+.ltr:nth-child(1) { transform: rotate(  0deg) translate(0)    rotate(   0deg); background-color: darkgreen }
 .ltr:nth-child(2) { transform: rotate( 60deg) translate(90px) rotate( -60deg) }
 .ltr:nth-child(3) { transform: rotate(120deg) translate(90px) rotate(-120deg) }
 .ltr:nth-child(4) { transform: rotate(180deg) translate(90px) rotate(-180deg) }
