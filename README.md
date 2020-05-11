@@ -5,7 +5,6 @@ https://www.nytimes.com/puzzles/spelling-bee
 but all hand-made...
 
 ## todo
-- fix iOS auto-enter bug
 - [new puzzle] button
 - pick levels / names / indicator (pie chart?)
 
