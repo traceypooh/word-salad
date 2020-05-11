@@ -28,7 +28,8 @@ function webpage() {
   <form id="form">
     <b>enter word:</b>
     <input class="input" type="text" id="enter"></input>
-    <input class="btn btn-sm btn-primary" type="submit" value="enter"></input>
+    <input class="btn btn-sm btn-primary" type="submit" value="ENTER"></input>
+    <input class="btn btn-sm btn-warning" type="button" value="DEL" id="del1"></input>
 
     <b>score:</b>
     <div id="score">0</div>

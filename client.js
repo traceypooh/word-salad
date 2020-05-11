@@ -87,6 +87,7 @@ function msg(str) {
     `<div class="alert alert-info">${str}</div>`,
   )
   setTimeout(() => $('#msg .alert').css('opacity', 0), 500)
+  return false
 }
 
 
@@ -99,28 +100,56 @@ function enter() {
   $enter.val('')
   log({ submitted })
 
-  if (!submitted.includes(p.center)) {
-    msg(`${submitted} missing <b>${p.center.toUpperCase()}</b>`)
-    return false
-  }
+  if (!submitted.includes(p.center))
+    return msg(`${submitted} missing <b>${p.center.toUpperCase()}</b>`)
+
+  if (submitted in state.found)
+    return msg(`${submitted} already found`)
 
   const score = word_score(submitted)
 
-  if (!score) {
-    msg(`${submitted} not in list`)
-    return false
+  if (!score)
+    return msg(`${submitted} not in list`)
+
+  const pangram = (submitted in p.alls)
+
+  const encouragment = (
+    // eslint-disable-next-line no-nested-ternary
+    pangram
+      ? '🎉 you are AMAZING!! 🎉'
+      : (
+        // eslint-disable-next-line no-nested-ternary
+        score > 7
+          ? '😍 OH SNAP!!'
+          : (score > 1
+            ? '🚀 fantastic!'
+            : '😎 nice!'
+          )
+      )
+  )
+
+
+  msg(`${encouragment}  <b>+${score} pts</b>`)
+
+  if (pangram) {
+    // special commendation for a pangram!
+    setTimeout(() => {
+      $('body').addClass('flip')
+      setTimeout(() => $('body').removeClass('flip'), 1200)
+    }, 750)
   }
-
-  // eslint-disable-next-line no-nested-ternary
-  const encouragment = (score > 7 ? '😍 OH SNAP' : (score > 1 ? '🚀 fantastic' : '😎 nice'))
-
-  msg(`${encouragment}!  <b>+${score} pts</b>`)
 
   state.score += score
   state.found[submitted] = true
 
   update()
   return false
+}
+
+
+function del1() {
+  const $enter = $('#enter')
+  $enter.val($enter.val().slice(0, -1))
 }
 
 
@@ -171,9 +200,13 @@ function add_letters() {
 
 
 function spoil() {
-  const answers = []
-  Object.keys(p.words).map((e) => answers.push(e in state.found ? e : `<i>${e in p.alls ? `<b>${e} *</b>` : e}</i>`))
-  $('#found').html(answers.join('<br>'))
+  if (!$('#found i').length) {
+    const answers = []
+    Object.keys(p.words).map((e) => answers.push(e in state.found ? e : `<i>${e in p.alls ? `<b>${e} *</b>` : e}</i>`))
+    $('#found').html(answers.join('<br>'))
+  } else {
+    update()
+  }
 }
 
 
@@ -219,7 +252,7 @@ $(() => {
   })
 
   $('#form').on('submit', enter)
-  $('#enter').on('change', enter)
+  $('#del1').on('click', del1)
 
   $('#shuffle').on('click', add_letters)
 

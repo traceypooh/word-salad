@@ -108,3 +108,12 @@ body {
 #cite.card { display: block }
 #misc.card { display: block }
 a { color: cyan }
+
+
+/* fun animations */
+body {
+  transition: transform 1s ease;
+}
+.flip {
+  transform: rotateY(90deg)
+}
