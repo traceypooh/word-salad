@@ -25,7 +25,7 @@ function webpage() {
   <div class="ltrs">
   </div>
 
-  <form id="form">
+  <form id="form" action="/">
     <b>enter word:</b>
     <input class="input" type="text" id="enter"></input>
     <input class="btn btn-sm btn-primary" type="submit" value="ENTER"></input>
