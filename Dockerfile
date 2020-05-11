@@ -11,5 +11,5 @@ RUN ln -s  /av/env/zshrc    /home/node/.zshrc  &&  \
 RUN npm i
 RUN touch puzzle.json  &&  chmod 666 puzzle.json
 
-USER node
+# USER node
 CMD [ "./node_modules/.bin/supervisor", "." ]
