@@ -20,13 +20,13 @@ wget -qO- 'http://app.aspell.net/create?max_size=60&spelling=US&max_variant=0&di
 # lowercase
 # 4+ letter words only
 fgrep -vi s words-scowl.txt \
-  |tr A-Z a-z \
   |fgrep -A100000 -- --- \
   |fgrep -v -- --- \
   |tr A-Z a-z \
   |egrep '^....' \
   |sort -u -o words.txt
 
+# find every pangram word containing 7 unique letters
 cat words.txt \
   |nor 'const chars = [...new Set(line.split(""))]; if (chars.length > 6) log(line);' \
   |sort -u -o pangrams.txt
