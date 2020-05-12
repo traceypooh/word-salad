@@ -33,7 +33,7 @@ const LETTERS = {
   p: 2,
   q: 1,
   r: 6,
-  s: 4,
+  // s: 4, // to avoid spurious plurals, it seems this is never used
   t: 6,
   u: 4,
   v: 2,

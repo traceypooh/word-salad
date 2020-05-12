@@ -7,6 +7,7 @@ but all hand-made...
 ## todo
 - [new puzzle] button
 - pick levels / names / indicator (pie chart?)
+- leader boards!
 
 ## setup
 ```bash
@@ -14,11 +15,11 @@ but all hand-made...
 wget -qO- 'http://app.aspell.net/create?max_size=60&spelling=US&max_variant=0&diacritic=strip&download=wordlist&encoding=utf-8&format=inline' >| words-scowl.txt
 
 
-# NO lame 's variants
+# NO lame 's variants - and NO 's', period
 # remove preamble
 # lowercase
 # 4+ letter words only
-egrep -v "'s$" words-scowl.txt \
+fgrep -vi s words-scowl.txt \
   |tr A-Z a-z \
   |fgrep -A100000 -- --- \
   |fgrep -v -- --- \
@@ -26,7 +27,13 @@ egrep -v "'s$" words-scowl.txt \
   |egrep '^....' \
   |sort -u -o words.txt
 
+cat words.txt \
+  |nor 'const chars = [...new Set(line.split(""))]; if (chars.length > 6) log(line);' \
+  |sort -u -o pangrams.txt
 ```
+
+## helfpul links
+- https://nytbee.com/
 
 ## sample analysis
 ```text
