@@ -3,3 +3,9 @@ variables:
 
 include:
   - remote: 'https://git.archive.org/www/nomad/-/raw/master/.gitlab-ci.yml'
+
+test:
+  stage: test
+  image: ${CI_REGISTRY_IMAGE}/${CI_COMMIT_REF_NAME}:${CI_COMMIT_SHA}
+  script:
+    - npm test
