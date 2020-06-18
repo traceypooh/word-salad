@@ -108,7 +108,7 @@ function get_letters() {
   let center
   do {
     center = consonants[Math.floor(Math.random() * consonants.length)]
-  } while (center !== 'q'  &&  center !== 'j'  &&  center !== 'z') // avoid super-tough center ltrs
+  } while (center === 'q'  ||  center === 'j'  ||  center === 'z') // avoid super-tough center ltrs
   // log({ consonants, center, letters })
 
   if (SPECIFIC_GAME)
