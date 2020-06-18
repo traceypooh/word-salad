@@ -5,6 +5,8 @@ import { execSync } from 'child_process'
 import { writeFileSync } from 'fs'
 
 const SIZE = 7
+const MIN_WORDS =  50
+const MAX_WORDS = 150
 
 // you can switch this to a specific letters/center set if desired
 const SPECIFIC_GAME = false // { letters: 'hoifwtr'.split(''), center: 'r' }
@@ -103,7 +105,10 @@ function get_letters() {
   // now pick the central letter
   const consonants = letters.filter((e) => !['a', 'e', 'i', 'o', 'u'].includes(e))
 
-  const center = consonants[Math.floor(Math.random() * consonants.length)]
+  let center
+  do {
+    center = consonants[Math.floor(Math.random() * consonants.length)]
+  } while (center !== 'q'  &&  center !== 'j'  &&  center !== 'z') // avoid super-tough center ltrs
   // log({ consonants, center, letters })
 
   if (SPECIFIC_GAME)
@@ -136,13 +141,16 @@ function create() {
 
 
 function make_puzzle() {
-  // keep trying until we get at least one word w/ all the letters
+  // keep trying until we get at least one word w/ all the letters,
+  // and also neither too few nor too many words
   let puzzle
   do {
     puzzle = create()
     process.stdout.write('.')
     execSync('sleep .1') // avoid CPU meltdown
-  } while (!puzzle.alls.length)
+  } while (
+    !puzzle.alls.length || puzzle.words.length < MIN_WORDS || puzzle.words.length > MAX_WORDS
+  )
 
   writeFileSync('puzzle.json', JSON.stringify(puzzle))
 
