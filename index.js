@@ -57,7 +57,7 @@ http.createServer((req, res) => {
 
   case '':
     // Generate or regenerate ~4am pactime
-    // (kuberenetes health/liveness probes us ~every 10s)
+    // (nomad health/liveness probes us ~every 10s)
     if (!existsSync('puzzle.json')  ||  !lstatSync('puzzle.json').size  ||
         new Date().toISOString().slice(11, 18) === '11:10:0') {
       make_puzzle()
