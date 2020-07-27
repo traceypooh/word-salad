@@ -2,7 +2,7 @@ variables:
   NOMAD__HOSTNAME: word-salad.archive.org
 
 include:
-  - remote: 'https://git.archive.org/www/nomad/-/raw/master/.gitlab-ci.yml'
+  - remote: 'https://gitlab.com/internetarchive/nomad/-/raw/master/.gitlab-ci.yml'
 
 test:
   stage: test
