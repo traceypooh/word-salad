@@ -32,6 +32,9 @@ FI=$THOME/av/bin/aliases-tv         && [ -e $FI ] && source $FI
 [ "$KUBERNETES_SERVICE_PORT_HTTPS" = "443" ]  &&  export TERM=xterm-color
 
 
+# node v15 requires more virtual memory peaks
+ulimit -v 20000000
+
 
 function no-av() {
   # find location of repo - look for production, but replace with local, when both
@@ -41,21 +44,24 @@ function no-av() {
 
   # now adjust that to the CWD we're in now
   NODIR=./$(realpath --relative-to=. $NODIR)
+  export AVHOME=$(realpath $NODIR/../..)
 
   echo "
 import path from 'path'
 import fs from 'fs'
+import * as cp from 'child_process'
 import { existsSync, mkdirSync, readdirSync, readFileSync, realpathSync, renameSync } from 'fs'
 import request from '$NODIR/../../node_modules/sync-request/lib/index.js'
 
 import { ksort, krsort, str_replace, vsort, vrsort } from '$NODIR/util/strings.js'
 import { log, fatal, warn, warnfull } from '$NODIR/util/log.js'
-import { cmd, esc, exe, exePP, exePPW, execSync } from '$NODIR/util/cmd.js'
-import { date, datetimeTZ, filemtime, strtotime, time, ymdhis, ymdhi } from '$NODIR/time.js'
+import { cmd, esc, exe, exePP, exePPW, exeQT, execSync,
+         ARRAY, CONTINUE, PASSTHRU, PRINT, STATUS, WARN } from '$NODIR/util/cmd.js'
+import { date, datetimeTZ, hms, hms2sec, filemtime, strtotime, time, ymdhis, ymdhi } from '$NODIR/time.js'
 
 import { https_request } from '$NODIR/https_request.js'
 
-import search          from '$NODIR/tv/search.js'
+import { search, IA }  from '$NODIR/tv/search.js'
 import * as Str        from '$NODIR/util/strings.js'
 import * as Tm         from '$NODIR/time.js'
 import * as Config     from '$NODIR/util/config.js'
@@ -66,7 +72,10 @@ import * as Recordings from '$NODIR/tv/recordings.js'
 import * as Tuners     from '$NODIR/tv/tuners.js'
 import * as Tasks      from '$NODIR/tv/tasks.js'
 import ERR, * as Err   from '$NODIR/tv/err.js'
-import * as Meta       from '$NODIR/tv/meta.js'
+import Meta            from '$NODIR/tv/meta.js'
+import Identify        from '$NODIR/identify.js'
+import Video           from '$NODIR/video.js'
+import FilesXML, { xml_to_map } from '$NODIR/util/files-xml.js'
 
 "
 }
@@ -211,9 +220,8 @@ $PET/.gitlab-ci.yml
 $PET/chart/*
 $PET/Dockerfile
 $PET/bin/install.sh
-$HOME/kre8/*
-$HOME/kre8/*/*
-$HOME/kre8/*/*/*
+$HOME/dev/kre8/*
+$HOME/dev/kre8/*/*
 $HOME/other/notes.md
 $HOME/.aliases
 ) 2>/dev/null; (
