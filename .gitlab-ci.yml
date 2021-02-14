@@ -1,5 +1,5 @@
 variables:
-  NOMAD__HOSTNAME: word-salad.archive.org
+  NOMAD_VAR_HOSTNAMES: '["word-salad.archive.org"]'
 
 include:
   - remote: 'https://gitlab.com/internetarchive/nomad/-/raw/master/.gitlab-ci.yml'
