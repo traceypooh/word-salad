@@ -28,7 +28,7 @@ fgrep -vi s words-scowl.txt \
 
 # find every pangram word containing 7 unique letters
 cat words.txt \
-  |nor 'const chars = [...new Set(line.split(""))]; if (chars.length > 6) log(line);' \
+  |nor 'const chars = [...new Set(line.split(""))]; if (chars.length === 7) log(line);' \
   |sort -u -o pangrams.txt
 ```
 
@@ -43,3 +43,4 @@ Number of Answers: 25
 Points Needed for Genius: 52
 Genius requires between 8 and 23 words. You need at least a 6-letter word to reach genius. If you don't get the pangram, you need 90% of the total points to reach genius. If you get the pangram, you only need 62% of the remaining points to reach genius.
 ```
+dont allow ING or ED
