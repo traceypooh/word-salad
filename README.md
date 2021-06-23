@@ -19,11 +19,13 @@ wget -qO- 'http://app.aspell.net/create?max_size=60&spelling=US&max_variant=0&di
 # remove preamble
 # lowercase
 # 4+ letter words only
+# nope
 fgrep -vi s words-scowl.txt \
   |fgrep -A100000 -- --- \
   |fgrep -v -- --- \
   |tr A-Z a-z \
   |egrep '^....' \
+  |egrep -v nigge. \
   |sort -u -o words.txt
 
 # find every pangram word containing 7 unique letters
