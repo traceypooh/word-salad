@@ -4,9 +4,8 @@ variables:
 include:
   - remote: 'https://gitlab.com/internetarchive/nomad/-/raw/master/.gitlab-ci.yml'
 
-test:
+lint:
+  image: registry.gitlab.com/internetarchive/eslint/main
   stage: test
-  image: ${CI_REGISTRY_IMAGE}/${CI_COMMIT_REF_SLUG}:${CI_COMMIT_SHA}
   script:
-    - cd /app
-    - npm test
+    - /app/lint
