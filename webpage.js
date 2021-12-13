@@ -1,4 +1,4 @@
-const VERSION = 3
+const VERSION = 4
 
 function webpage() {
   return `
@@ -12,8 +12,7 @@ function webpage() {
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body>
-<link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-<script src="/node_modules/jquery/dist/jquery.min.js"></script>
+<link href="https://esm.archive.org/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
 
 <link href="/css.css?v=${VERSION}" rel="stylesheet" type="text/css"/>
 <script src="/client.js?v=${VERSION}" type="module"></script>
@@ -60,7 +59,8 @@ function webpage() {
   <div id="misc" class="card card-body bg-dark">
     😍 <i>dedicated to sonia</i>.<br>
     Word list from <a href="http://app.aspell.net/create">SCOWL</a>.<br>
-    Built with 🤍 by <a href="https://poohBot.com">@tracey_pooh</a> using nodejs.<br>
+    Built with 🤍 by <a href="https://poohBot.com">@tracey_pooh</a> using
+    <a href="https://deno.land/">deno</a> 🦕<br>
   </div>
 </div>
 </body></html>

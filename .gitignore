@@ -1,7 +1,1 @@
-etc/config.json
-node_modules
-package-lock.json
-test/www
-www/js/build
-www/json
 puzzle.json

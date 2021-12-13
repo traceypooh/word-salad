@@ -1,15 +1,12 @@
-FROM node:alpine
+FROM denoland/deno:alpine
 
 RUN apk add  zsh  wget  jq  colordiff
 
-COPY .   /app
 WORKDIR  /app
-
-RUN ln -s  /av/env/zshrc    /home/node/.zshrc  &&  \
-    ln -s  /av/env/aliases  /home/node/.aliases
+COPY . .
 
 RUN npm i
 RUN touch puzzle.json  &&  chmod 666 puzzle.json
 
-USER node
-CMD [ "./node_modules/.bin/supervisor", "." ]
+USER deno
+CMD [ './index.js', '-p, 5000, '--no-dotfiles', '--cors' ]

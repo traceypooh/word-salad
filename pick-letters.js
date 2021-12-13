@@ -1,8 +1,8 @@
 /* eslint-disable no-continue */
 
-import { basename } from 'path'
-import { execSync } from 'child_process'
-import { writeFileSync } from 'fs'
+import { basename } from 'https://deno.land/std/path/mod.ts'
+import { writeAllSync } from 'https://deno.land/std/io/util.ts'
+import { sleep } from 'https://deno.land/x/sleep/mod.ts'
 
 const SIZE = 7
 const MIN_WORDS =  50
@@ -123,9 +123,11 @@ function create() {
 
   // now filter words dictionary to just the words made up of the limited letters,
   // where each word _additionally_ has to contain center letter.
-  const cmd = `egrep '^[${letters.join('')}]+$' words.txt |fgrep ${center}`
-  // log({ cmd })
-  const words = execSync(cmd).toString().trimEnd().split('\n')
+  const words = Deno.readTextFileSync('./words.txt')
+    .trimEnd()
+    .split('\n')
+    .filter((e) => e.match(RegExp(`^[${letters.join('')}]+$`)))
+    .filter((e) => e.includes(center))
 
   // find the words that have _all letters_ in them
   const alls = []
@@ -140,28 +142,33 @@ function create() {
 }
 
 
-function make_puzzle() {
+async function make_puzzle() {
   // keep trying until we get at least one word w/ all the letters,
   // and also neither too few nor too many words
   let puzzle
   do {
     puzzle = create()
-    process.stdout.write('.')
-    execSync('sleep .1') // avoid CPU meltdown
+    writeAllSync(Deno.stdout, new TextEncoder().encode('.'))
+    await sleep(0.1) // avoid CPU meltdown
   } while (
     !puzzle.alls.length || puzzle.words.length < MIN_WORDS || puzzle.words.length > MAX_WORDS
   )
 
-  writeFileSync('puzzle.json', JSON.stringify(puzzle))
+  Deno.writeTextFileSync('puzzle.json', JSON.stringify(puzzle))
 
   log({ puzzle })
 }
 
 
-if (basename(process.argv[1]) === 'pick-letters.js') {
-  log('CLI DETECTED')
-  make_puzzle()
+async function main() {
+  if (basename(Deno.mainModule) === 'pick-letters.js') {
+    log('CLI DETECTED')
+    await make_puzzle()
+  }
 }
+
+// eslint-disable-next-line no-void
+void main()
 
 
 // eslint-disable-next-line import/prefer-default-export

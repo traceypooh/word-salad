@@ -1,4 +1,6 @@
 
+import $ from 'https://esm.archive.org/jquery'
+
 // puzzle config
 const p = {}
 

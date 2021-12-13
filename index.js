@@ -1,85 +1,35 @@
-/* eslint-disable no-continue */
+#!/usr/bin/env -S deno run --location https://word-salad.archive.org --unstable --no-check --allow-read --allow-write=. --allow-net
 
-import http from 'http'
-import { createReadStream, existsSync, lstatSync } from 'fs'
+import { existsSync } from 'https://deno.land/std/fs/mod.ts'
+import main from 'https://raw.githubusercontent.com/traceypooh/deno_std/main/http/file_server.ts'
 
 import { make_puzzle } from './pick-letters.js'
 import { webpage } from './webpage.js'
 
-// eslint-disable-next-line no-console
-const log = console.log.bind(console)
 
+// dynamic part of the web server
+async function handler(req) {
+  const headers = new Headers()
+  headers.append('content-type', 'text/html')
 
-/**
- * Outputs nice micro access.log like entry
- * @param string file  File being served
- * @param int code  HTTP status code
- */
-function alog(file, code = 200) {
-  log(`${new Date().toISOString().slice(0, 19).replace(/T/, ' ')} ${code} /${file || ''}`)
-}
+  const url = new URL(req.url)
 
-
-// Main web server
-http.createServer((req, res) => {
-  let type = 'text/html'
-  let status = 200
-  let htm = false
-  const file = req.url
-    .slice(1) // nix lead /
-    .split(/[?&]/)[0] // ignore any cgi args
-
-  switch (file) {
-  // case '/node_modules/bootstrap/dist/js/bootstrap.min.js':
-
-  case 'css.css':
-  case 'node_modules/bootstrap/dist/css/bootstrap.min.css':
-  case 'node_modules/bootstrap/dist/css/bootstrap.min.css.map':
-    type = 'text/css'
-    break
-
-  case 'node_modules/jquery/dist/jquery.min.js':
-  case 'client.js':
-    type = 'text/javascript'
-    break
-
-  case 'favicon.ico':
-    type = 'image/x-icon'
-    break
-
-  case 'puzzle.json':
-    type = 'application/json'
-    break
-
-  case 'logo.png':
-    type = 'image/png'
-    break
-
-  case '':
+  if (url.pathname === '/') {
     // Generate or regenerate ~4am pactime
     // (nomad health/liveness probes us ~every 10s)
-    if (!existsSync('puzzle.json')  ||  !lstatSync('puzzle.json').size  ||
+    if (!existsSync('puzzle.json')  ||  !Deno.lstatSync('puzzle.json').size  ||
         new Date().toISOString().slice(11, 18) === '11:10:0') {
-      make_puzzle()
+      await make_puzzle()
     }
 
-    htm = webpage()
-    break
-
-  default:
-    status = 404
-    htm = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"></head><body>
-      🇫🇷 Merde, il n'y a rien ici! - Corentin`
+    return Promise.resolve(new Response(webpage(), { status: 200, headers }))
   }
 
-  // static file - send it directly out
-  alog(file)
-  res.writeHead(status, { 'Content-Type': type })
+  return Promise.resolve(new Response(
+    `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"></head><body>
+    🇫🇷 Merde, il n'y a rien ici! - Corentin`,
+    { status: 404, headers },
+  ))
+}
 
-  if (htm)
-    res.end(htm)
-  else
-    createReadStream(file).pipe(res)
-}).listen(5000)
-
-alog('starting', 666)
+main(handler)
