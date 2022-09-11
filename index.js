@@ -1,14 +1,15 @@
 #!/usr/bin/env -S deno run --location https://word-salad.archive.org --unstable --no-check --allow-read --allow-write=. --allow-net
 
 import { existsSync } from 'https://deno.land/std/fs/mod.ts'
-import main from 'https://raw.githubusercontent.com/traceypooh/deno_std/main/http/file_server.ts'
+import main from 'https://deno.land/x/file_server_plus/mod.ts'
 
 import { make_puzzle } from './pick-letters.js'
 import { webpage } from './webpage.js'
 
 
 // dynamic part of the web server
-async function handler(req) {
+// eslint-disable-next-line no-undef
+globalThis.finalHandler = async (req) => {
   const headers = new Headers()
   headers.append('content-type', 'text/html')
 
@@ -32,4 +33,4 @@ async function handler(req) {
   ))
 }
 
-main(handler)
+main()
