@@ -1,7 +1,7 @@
 /* eslint-disable no-continue */
 
 import { basename } from 'https://deno.land/std/path/mod.ts'
-import { writeAllSync } from 'https://deno.land/std/streams/conversion.ts'
+import { writeAllSync } from 'https://deno.land/std/streams/write_all.ts'
 import { sleep } from 'https://deno.land/x/sleep/mod.ts'
 
 const SIZE = 7
