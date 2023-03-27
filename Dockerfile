@@ -9,4 +9,4 @@ COPY . .
 RUN chmod ugo-w *  &&  touch puzzle.json  &&  chmod 666 puzzle.json
 
 USER deno
-CMD [ "./index.js" ]
+CMD [ "./index.js", "--watch" ]
