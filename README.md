@@ -1,6 +1,6 @@
 # word-salad
 
-very similar to NY Times Spelling Bee
+very similar to NY Times Spelling Bee 🐝
 https://www.nytimes.com/puzzles/spelling-bee
 but all hand-made...
 
