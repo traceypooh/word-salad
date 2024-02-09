@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --location https://word-salad.archive.org --unstable --no-check --allow-read --allow-write=. --allow-net
+#!/usr/bin/env -S deno run --location https://word-salad.archive.org --no-check --allow-read --allow-write=. --allow-net
 
 import { existsSync } from 'https://deno.land/std/fs/mod.ts'
 import httpd from 'https://deno.land/x/httpd/mod.js'
