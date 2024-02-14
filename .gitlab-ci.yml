@@ -5,7 +5,7 @@ include:
   - remote: 'https://gitlab.com/internetarchive/nomad/-/raw/master/.gitlab-ci.yml'
 
 lint:
-  image: registry.gitlab.com/internetarchive/eslint/main
+  image: ghcr.io/internetarchive/dyno:main
   stage: test
   script:
     - /app/lint
