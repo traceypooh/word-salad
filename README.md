@@ -46,3 +46,4 @@ Points Needed for Genius: 52
 Genius requires between 8 and 23 words. You need at least a 6-letter word to reach genius. If you don't get the pangram, you need 90% of the total points to reach genius. If you get the pangram, you only need 62% of the remaining points to reach genius.
 ```
 maybe dont allow ING or ED?
+
