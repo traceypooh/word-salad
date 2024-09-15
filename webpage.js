@@ -1,6 +1,7 @@
 const VERSION = 4
 
-function webpage() {
+function webpage(local) {
+  const prefix = local ? './' : 'https://esm.archive.org/bootstrap@5.1.3/dist/css/'
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +13,7 @@ function webpage() {
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body>
-<link href="https://esm.archive.org/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="${prefix}bootstrap.min.css" rel="stylesheet" type="text/css"/>
 
 <link href="/css.css?v=${VERSION}" rel="stylesheet" type="text/css"/>
 <script src="/client.js?v=${VERSION}" type="module"></script>

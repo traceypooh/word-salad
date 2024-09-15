@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --location https://word-salad.archive.org --no-check --allow-read --allow-write=. --allow-net
+#!/usr/bin/env -S deno run --location https://word-salad.archive.org --no-check --allow-read --allow-write=. --allow-net --watch
 
 import { existsSync } from 'https://deno.land/std/fs/mod.ts'
 import httpd from 'https://deno.land/x/httpd/mod.js'
@@ -16,6 +16,6 @@ httpd((req, headers) => {
         new Date().toISOString().slice(11, 18) === '11:10:0') {
       return make_puzzle().then(() => new Response(webpage(), { headers }))
     }
-    return new Response(webpage(), { headers })
+    return new Response(webpage(req.url.includes('http://localhost:')), { headers })
   }
 }, { ls: false })
