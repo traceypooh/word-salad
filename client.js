@@ -1,5 +1,3 @@
-import $ from 'https://esm.archive.org/jquery'
-
 // puzzle config
 const p = {}
 
@@ -54,9 +52,9 @@ function store_state() {
 function update() {
   store_state()
   const founds = Object.keys(state.found).sort()
-  $('#found').html(founds.join('<br>'))
-  $('#score').html(state.score)
-  $('#nfound').html(founds.length)
+  document.getElementById('found').innerHTML = founds.join('<br>')
+  document.getElementById('score').innerHTML = state.score
+  document.getElementById('nfound').innerHTML = founds.length
 }
 
 
@@ -75,7 +73,7 @@ function restore_state() {
     state.found = stored.found
     state.score = stored.score
     state.letters = p.letters.sort().join('')
-    $('#msg').html('<div class="alert alert-info">welcome back!</div>')
+    document.getElementById('msg').innerHTML = '<div class="alert alert-info">welcome back!</div>'
     update()
   } else {
     state.letters = p.letters.sort().join('')
@@ -83,34 +81,39 @@ function restore_state() {
 }
 
 
-function msg(str) {
-  $('#msg').html(
-    `<div class="alert alert-info">${str}</div>`,
-  )
-  setTimeout(() => $('#msg .alert').css('opacity', 0), 500)
+function msg(str, evt = null) {
+  document.getElementById('msg').innerHTML = `<div class="alert alert-info">${str}</div>`
+
+  // eslint-disable-next-line no-return-assign
+  setTimeout(() => document.querySelector('#msg .alert').style.opacity = 0, 500)
+
+  // eslint-disable-next-line no-unused-expressions
+  evt && evt.preventDefault  && evt.preventDefault()
+  // eslint-disable-next-line no-unused-expressions
+  evt && evt.stopPropagation && evt.stopPropagation()
   return false
 }
 
 
-function enter() {
-  const $enter = $('#enter')
-  const submitted = $enter.val().trim().toLowerCase()
+function enter(evt) {
+  const $enter = document.getElementById('enter')
+  const submitted = $enter.value.trim().toLowerCase()
   if (submitted === '')
     return false // to aid w/ iOS - as of now - we get 2 events a lot w/ 2nd as blank - ignore it
 
-  $enter.val('')
+  $enter.value = ''
   log({ submitted })
 
   if (!submitted.includes(p.center))
-    return msg(`${submitted} missing <b>${p.center.toUpperCase()}</b>`)
+    return msg(`${submitted} missing <b>${p.center.toUpperCase()}</b>`, evt)
 
   if (submitted in state.found)
-    return msg(`${submitted} already found`)
+    return msg(`${submitted} already found`, evt)
 
   const score = word_score(submitted)
 
   if (!score)
-    return msg(`${submitted} not in list`)
+    return msg(`${submitted} not in list`, evt)
 
   const pangram = (submitted in p.alls)
 
@@ -135,8 +138,8 @@ function enter() {
   if (pangram) {
     // special commendation for a pangram!
     setTimeout(() => {
-      $('body').addClass('flip')
-      setTimeout(() => $('body').removeClass('flip'), 1200)
+      document.querySelector('body').classList.add('flip')
+      setTimeout(() => document.querySelector('body').classList.remove('flip'), 1200)
     }, 750)
   }
 
@@ -144,13 +147,18 @@ function enter() {
   state.found[submitted] = true
 
   update()
+
+  // eslint-disable-next-line no-unused-expressions
+  evt && evt.preventDefault  && evt.preventDefault()
+  // eslint-disable-next-line no-unused-expressions
+  evt && evt.stopPropagation && evt.stopPropagation()
   return false
 }
 
 
 function del1() {
-  const $enter = $('#enter')
-  $enter.val($enter.val().slice(0, -1))
+  const $enter = document.getElementById('enter')
+  $enter.value = $enter.value.slice(0, -1)
 }
 
 
@@ -173,12 +181,12 @@ function shuffle(a) {
 
 
 function letter_pressed(evt) {
-  const $targ = $(evt.currentTarget)
-  const letter = $targ.text()
-  $targ.addClass('pressed')
-  setTimeout(() => $targ.removeClass('pressed'), 250)
-  const val = $('#enter').val().concat(letter)
-  $('#enter').val(val)
+  const targ = evt.currentTarget
+  const letter = targ.innerText
+  targ.classList.add('pressed')
+  setTimeout(() => targ.classList.remove('pressed'), 250)
+  const val = `${document.getElementById('enter').value ?? ''}${letter}`
+  document.getElementById('enter').value = val
 
   // eslint-disable-next-line no-unused-expressions
   evt && evt.preventDefault  && evt.preventDefault()
@@ -194,17 +202,16 @@ function add_letters() {
   while (ltrs.length)
     htm += `<a class="ltr" href="#"><div>${ltrs.pop()}</div></a>`
 
-  $('.ltrs').html(htm)
-
-  $('.ltr').on('click', letter_pressed)
+  document.querySelector('.ltrs').innerHTML = htm
+  document.querySelectorAll('.ltr').forEach((e) => e.addEventListener('click', letter_pressed))
 }
 
 
 function spoil() {
-  if (!$('#found i').length) {
+  if (!document.querySelectorAll('#found i').length) {
     const answers = []
     Object.keys(p.words).map((e) => answers.push(e in state.found ? e : `<i>${e in p.alls ? `<b>${e} *</b>` : e}</i>`))
-    $('#found').html(answers.join('<br>'))
+    document.getElementById('found').innerHTML = answers.join('<br>')
   } else {
     update()
   }
@@ -212,7 +219,7 @@ function spoil() {
 
 
 function help() {
-  $('#help').html(`
+  document.getElementById('help').innerHTML = `
     <li>
       today's puzzle contains <u>${Object.keys(p.words).length}</u> words
       <span id="nfound">0</span> discovered
@@ -225,14 +232,14 @@ function help() {
     <li>words longer than 4 letters get an additional point per letter</li>
     <li>a “pangram” - which uses every letter - is worth 7 extra points</li>
     <li>this puzzle contains <u>${Object.keys(p.alls).length}</u> pangrams</li>
-  `)
+  `
 }
 
 
-$(() => {
-  $('#enter').focus()
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('enter').focus()
 
-  $.getJSON('puzzle.json', (ret) => {
+  fetch('puzzle.json').then((e) => e.json()).then((ret) => {
     // logically copy to p
     for (const [k, v] of Object.entries(ret)) {
       if (['words', 'alls'].includes(k)) {
@@ -252,10 +259,9 @@ $(() => {
     restore_state()
   })
 
-  $('#form').on('submit', enter)
-  $('#del1').on('click', del1)
+  document.getElementById('form').addEventListener('submit', enter)
+  document.getElementById('del1').addEventListener('click', del1)
 
-  $('#shuffle').on('click', add_letters)
-
-  $('#spoil').on('click', spoil)
+  document.getElementById('shuffle').addEventListener('click', add_letters)
+  document.getElementById('spoil').addEventListener('click', spoil)
 })
