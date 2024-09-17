@@ -1,5 +1,7 @@
 # word-salad
 
+https://word-salad.archive.org/
+word puzzle game
 very similar to NY Times Spelling Bee 🐝
 https://www.nytimes.com/puzzles/spelling-bee
 but all hand-made...
