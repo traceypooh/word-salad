@@ -1,11 +1,13 @@
 // puzzle config
-const p = {}
+let p = {}
 
+// state of game play
+let score = 0
 const state = {
-  found: {},
-  score: 0,
+  found: [],
   letters: '',
 }
+
 
 // eslint-disable-next-line no-console
 const log = console.log.bind(console)
@@ -17,22 +19,22 @@ const log = console.log.bind(console)
  * @returns int
  */
 function word_score(word) {
-  if (word in state.found)
-    return 0
-
-  if (!(word in p.words))
+  if (!p.words.includes(word))
     return 0
 
   return (
     0 +
-    (word in p.alls ? 7 : 0) +
+    (p.alls.includes(word) ? 7 : 0) +
     (word.length > 4 ? word.length : 1)
   )
 }
 
+function words_score(words) {
+  return words.reduce((sum, e) => sum + word_score(e), 0)
+}
 
 function max_score() {
-  return Object.keys(p.words).reduce((sum, e) => sum + word_score(e), 0)
+  return words_score(p.words)
 }
 
 
@@ -51,9 +53,9 @@ function store_state() {
 
 function update() {
   store_state()
-  const founds = Object.keys(state.found).sort()
+  const founds = state.found.sort()
   document.getElementById('found').innerHTML = founds.join('<br>')
-  document.getElementById('score').innerHTML = state.score
+  document.getElementById('score').innerHTML = score
   document.getElementById('nfound').innerHTML = founds.length
 }
 
@@ -61,6 +63,17 @@ function update() {
 function restore_state() {
   if (typeof localStorage !== 'object')
     return
+
+  // first, see if they are importing a puzzle via CGI args
+  const cgi = new URLSearchParams(location.search)
+  if (cgi.get('letters')) {
+    state.letters = cgi.get('letters')
+    state.found = cgi.get('found').split(',').filter((e) => word_score(e))
+    store_state()
+    // state saved -- now redirect them to url w/o CGI args, so that if they refresh the
+    // page (w/ CGI args), they wont _revert_ and lose any further game progress.
+    location.href = location.href.replace(/\?.*/, '')
+  }
 
   const json = localStorage.getItem(storage_name())
   if (!json)
@@ -71,8 +84,8 @@ function restore_state() {
   if (stored.letters === p.letters.sort().join('')) {
     // same puzzle - restore it
     state.found = stored.found
-    state.score = stored.score
     state.letters = p.letters.sort().join('')
+    score = words_score(state.found)
     document.getElementById('msg').innerHTML = '<div class="alert alert-info">welcome back!</div>'
     update()
   } else {
@@ -107,15 +120,15 @@ function enter(evt) {
   if (!submitted.includes(p.center))
     return msg(`${submitted} missing <b>${p.center.toUpperCase()}</b>`, evt)
 
-  if (submitted in state.found)
+  if (state.found.includes(submitted))
     return msg(`${submitted} already found`, evt)
 
-  const score = word_score(submitted)
+  const scored = word_score(submitted)
 
-  if (!score)
+  if (!scored)
     return msg(`${submitted} not in list`, evt)
 
-  const pangram = (submitted in p.alls)
+  const pangram = p.alls.includes(submitted)
 
   const encouragment = (
     // eslint-disable-next-line no-nested-ternary
@@ -123,9 +136,9 @@ function enter(evt) {
       ? '🎉 you are AMAZING!! 🎉'
       : (
         // eslint-disable-next-line no-nested-ternary
-        score > 7
+        scored > 7
           ? '😍 OH SNAP!!'
-          : (score > 1
+          : (scored > 1
             ? '🚀 fantastic!'
             : '😎 nice!'
           )
@@ -133,7 +146,7 @@ function enter(evt) {
   )
 
 
-  msg(`${encouragment}  <b>+${score} pts</b>`)
+  msg(`${encouragment}  <b>+${scored} pts</b>`)
 
   if (pangram) {
     // special commendation for a pangram!
@@ -143,8 +156,8 @@ function enter(evt) {
     }, 750)
   }
 
-  state.score += score
-  state.found[submitted] = true
+  score += scored
+  state.found.push(submitted)
 
   update()
 
@@ -210,7 +223,7 @@ function add_letters() {
 function spoil() {
   if (!document.querySelectorAll('#found i').length) {
     const answers = []
-    Object.keys(p.words).map((e) => answers.push(e in state.found ? e : `<i>${e in p.alls ? `<b>${e} *</b>` : e}</i>`))
+    p.words.map((e) => answers.push(state.found.includes(e) ? e : `<i>${p.alls.includes(e) ? `<b>${e} *</b>` : e}</i>`))
     document.getElementById('found').innerHTML = answers.join('<br>')
   } else {
     update()
@@ -218,10 +231,16 @@ function spoil() {
 }
 
 
+function transfer_url() {
+  const url = `${location.href.replace(/\?.*/, '')}?letters=${state.letters}&found=${state.found.join(',')}`
+  // eslint-disable-next-line no-alert
+  alert(`BETA! copy this url to another device: ${url}`)
+}
+
 function help() {
   document.getElementById('help').innerHTML = `
     <li>
-      today's puzzle contains <u>${Object.keys(p.words).length}</u> words
+      today's puzzle contains <u>${p.words.length}</u> words
       <span id="nfound">0</span> discovered
     </li>
     <li>today's puzzle maximum score: <u>${max_score()}</u></li>
@@ -231,7 +250,7 @@ function help() {
     <li>1 point for 4 letter words</li>
     <li>words longer than 4 letters get an additional point per letter</li>
     <li>a “pangram” - which uses every letter - is worth 7 extra points</li>
-    <li>this puzzle contains <u>${Object.keys(p.alls).length}</u> pangrams</li>
+    <li>this puzzle contains <u>${p.alls.length}</u> pangrams</li>
   `
 }
 
@@ -240,18 +259,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('enter').focus()
 
   fetch('puzzle.json').then((e) => e.json()).then((ret) => {
-    // logically copy to p
-    for (const [k, v] of Object.entries(ret)) {
-      if (['words', 'alls'].includes(k)) {
-        // ... but switch these two from arrays to hashmaps
-        p[k] = {}
-        for (const word of ret[k].sort())
-          p[k][word] = true
-      } else {
-        p[k] = v
-      }
-    }
-
+    // copy to p
+    p = ret
     log(p)
 
     help()
@@ -264,4 +273,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('shuffle').addEventListener('click', add_letters)
   document.getElementById('spoil').addEventListener('click', spoil)
+  document.getElementById('transfer').addEventListener('click', transfer_url)
 })

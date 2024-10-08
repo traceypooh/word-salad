@@ -37,8 +37,9 @@ function webpage(local) {
     <div id="msg">
     </div>
 
-    <input class="btn btn-sm btn-info"    type="button" id="shuffle" value="shuffle"></input>
-    <input class="btn btn-sm btn-danger"  type="button" id="spoil"   value="spoiler"></input>
+    <input class="btn btn-sm btn-info"   type="button" id="shuffle"  value="shuffle"></input>
+    <input class="btn btn-sm btn-danger" type="button" id="spoil"    value="spoiler"></input>
+    <input class="btn btn-sm btn-info"   type="button" id="transfer" value="transfer game"></input>
   </form>
 
   <div id="found">
