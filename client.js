@@ -284,9 +284,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   fetch('puzzles.txt').then((e) => e.text()).then(async (ret) => {
     const n = days_into_year() // [0..366]
-    const zero_or_one = new Date().getFullYear() % 2 // 0 for even years; 1 for odd years
+    const multiplier = (new Date().getFullYear() - 2024) % 3 // 2024>0, 2025>1, 2026>2, 2027>0, ...
 
-    const letters = ret.split('\n')[n + (zero_or_one ? 366 : 0)]
+    const letters = ret.split('\n')[n + multiplier * 366]
     log({ letters })
     // copy to p
     p = await setup_puzzle(letters.split(''), letters[0])

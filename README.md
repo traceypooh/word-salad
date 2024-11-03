@@ -49,7 +49,7 @@ Genius requires between 8 and 23 words. You need at least a 6-letter word to rea
 ```
 maybe dont allow ING or ED?
 
-## rebuild 2y of games
+## rebuild 3y of games
 you can run this:
 ```sh
 ./make-puzzle.js
