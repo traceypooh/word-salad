@@ -1,12 +1,16 @@
+#!/usr/bin/env -S deno run --location https://word-salad.archive.org --no-check --allow-read --allow-write=. --allow-net --allow-import
+
 /* eslint-disable no-continue */
 
-import { basename } from 'https://deno.land/std/path/mod.ts'
 import { writeAllSync } from 'https://deno.land/std/io/write_all.ts'
 import { sleep } from 'https://deno.land/x/sleep/mod.ts'
+
+import setup_puzzle from './client.js'
 
 const SIZE = 7
 const MIN_WORDS =  50
 const MAX_WORDS = 150
+const NUMBER_PUZZLES = 366 * 3
 
 // you can switch this to a specific letters/center set if desired
 const SPECIFIC_GAME = false // { letters: 'hoifwtr'.split(''), center: 'r' }
@@ -118,58 +122,32 @@ function get_letters() {
 }
 
 
-function create() {
-  const { letters, center } = get_letters()
-
-  // now filter words dictionary to just the words made up of the limited letters,
-  // where each word _additionally_ has to contain center letter.
-  const words = Deno.readTextFileSync('./words.txt')
-    .trimEnd()
-    .split('\n')
-    .filter((e) => e.match(RegExp(`^[${letters.join('')}]+$`)))
-    .filter((e) => e.includes(center))
-
-  // find the words that have _all letters_ in them
-  const alls = []
-  for (const word of words) {
-    if ([...new Set(word.split(''))].join('').length === SIZE)
-      alls.push(word)
-  }
-
-  return {
-    letters, center, words, alls,
-  }
-}
-
-
-async function make_puzzle() {
-  // keep trying until we get at least one word w/ all the letters,
-  // and also neither too few nor too many words
-  let puzzle
-  do {
-    puzzle = create()
-    writeAllSync(Deno.stdout, new TextEncoder().encode('.'))
-    await sleep(0.1) // avoid CPU meltdown
-  } while (
-    !puzzle.alls.length || puzzle.words.length < MIN_WORDS || puzzle.words.length > MAX_WORDS
-  )
-
-  Deno.writeTextFileSync('puzzle.json', JSON.stringify(puzzle))
-
-  log({ puzzle })
-}
-
-
 async function main() {
-  if (basename(Deno.mainModule) === 'pick-letters.js') {
-    log('CLI DETECTED')
-    await make_puzzle()
-  }
+  await Deno.writeTextFile('puzzles.txt', '')
+  const made = {}
+  do {
+    // keep trying until we get at least one word w/ all the letters,
+    // and also neither too few nor too many words
+    let puzzle
+    do {
+      const { letters, center } = get_letters()
+      puzzle = await setup_puzzle(letters, center)
+      writeAllSync(Deno.stdout, new TextEncoder().encode('.'))
+      await sleep(0.03) // avoid CPU meltdown
+    } while (
+      !puzzle.alls.length || puzzle.words.length < MIN_WORDS || puzzle.words.length > MAX_WORDS
+    )
+
+    const { letters, center } = puzzle
+    const chars = `${center}${letters.filter((e) => e !== center).join('')}`
+    if (chars in made)
+      continue
+    made[chars] = 1
+
+    log({ puzzle })
+    await Deno.writeTextFile('puzzles.txt', `${chars}\n`, { create: true, append: true })
+  } while (Object.keys(made).length < NUMBER_PUZZLES)
 }
 
 // eslint-disable-next-line no-void
 void main()
-
-
-// eslint-disable-next-line import/prefer-default-export
-export { make_puzzle }

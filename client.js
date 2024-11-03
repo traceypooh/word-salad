@@ -1,3 +1,5 @@
+import { days_into_year } from 'https://av.prod.archive.org/js/time.js'
+
 // puzzle config
 let p = {}
 
@@ -255,12 +257,39 @@ function help() {
 }
 
 
+async function setup_puzzle(letters, center) {
+  // now filter words dictionary to just the words made up of the limited letters,
+  // where each word _additionally_ has to contain center letter.
+  const words = (await (await fetch('./words.txt')).text())
+    .trimEnd()
+    .split('\n')
+    .filter((e) => e.match(RegExp(`^[${letters.join('')}]+$`)))
+    .filter((e) => e.includes(center))
+
+  // find the words that have _all letters_ in them
+  const alls = []
+  for (const word of words) {
+    if ([...new Set(word.split(''))].join('').length === letters.length)
+      alls.push(word)
+  }
+
+  return {
+    letters, center, words, alls,
+  }
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('enter').focus()
 
-  fetch('puzzle.json').then((e) => e.json()).then((ret) => {
+  fetch('puzzles.txt').then((e) => e.text()).then(async (ret) => {
+    const n = days_into_year() // [0..366]
+    const zero_or_one = new Date().getFullYear() % 2 // 0 for even years; 1 for odd years
+
+    const letters = ret.split('\n')[n + (zero_or_one ? 366 : 0)]
+    log({ letters })
     // copy to p
-    p = ret
+    p = await setup_puzzle(letters.split(''), letters[0])
     log(p)
 
     help()
@@ -275,3 +304,6 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('spoil').addEventListener('click', spoil)
   document.getElementById('transfer').addEventListener('click', transfer_url)
 })
+
+
+export default setup_puzzle

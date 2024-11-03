@@ -48,3 +48,16 @@ Points Needed for Genius: 52
 Genius requires between 8 and 23 words. You need at least a 6-letter word to reach genius. If you don't get the pangram, you need 90% of the total points to reach genius. If you get the pangram, you only need 62% of the remaining points to reach genius.
 ```
 maybe dont allow ING or ED?
+
+## rebuild 2y of games
+you can run this:
+```sh
+./make-puzzle.js
+```
+and then commit the new `puzzles.txt` file
+
+
+## misc
+[bootstrap.min.css](bootstrap.min.css) was saved locally from:
+https://esm.archive.org/bootstrap@5.1.3/dist/css/bootstrap.min.css
+to enable full offline mode

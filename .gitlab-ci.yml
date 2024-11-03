@@ -1,6 +1,6 @@
 variables:
   NOMAD_VAR_HOSTNAMES: '["word-salad.archive.org"]'
-  NOMAD_VAR_CHECK_TIMEOUT: '5m'
+  NOMAD_VAR_PORTS: '{ 80 = "http" }'
 
 include:
   - remote: 'https://gitlab.com/internetarchive/nomad/-/raw/master/.gitlab-ci.yml'
