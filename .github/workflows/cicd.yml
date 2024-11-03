@@ -6,6 +6,6 @@ jobs:
     with:
       NOMAD_VAR_PORTS: '{ 80 = "http" }'
       NOMAD_VAR_HOSTNAMES: '["word-salad.archive.org"]'
-      # PLATFORMS: 'linux/amd64,linux/arm64'
+      PLATFORMS: 'linux/amd64,linux/arm64'
     secrets:
       NOMAD_TOKEN_EXT: ${{ secrets.NOMAD_TOKEN_EXT }}
