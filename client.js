@@ -1,4 +1,4 @@
-import { days_into_year } from 'https://av.prod.archive.org/js/time.js'
+import { days_into_year } from 'https://av.archive.org/js/time.js'
 
 // puzzle config
 let p = {}
